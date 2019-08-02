@@ -75,10 +75,19 @@ def tobs():
 ## --------------------------------------------------------------------------------------------------------
 # @app.route("/api/v1.0/<start date>")
 # def tobs():
-getdata= session.query(Measurement.date, Measurement.tobs).filter(Measurement.date.between(lasttwelve,start_date))
+#getdata= session.query(Measurement.date, Measurement.tobs).filter(Measurement.date.between(lasttwelve,start_date))
+@app.route('/api/v1.0/<start_d>')
+def temp_attr_query(start_d):
+    return  jsonify(calc_temps(start_d,"2017-08-23"))
 
+@app.route('/api/v1.0/<start_d>/<end_d>')
+def temp_attr_querys(start_d, end_d):   
+    return   jsonify(calc_temps(start_d,end_d))
 ##------------------------------------------------------------------------------------------------------------
-@app.route("/api/v1.0/<start>/<end>")
+# @app.route("/api/v1.0/<start>/<end>")
+# def start_end(start, end):
+#  result=calc_temps('2012-02-28', '2012-03-05')
+#  return (jsonify(result))
 
 def calc_temps(start_date, end_date):
     """TMIN, TAVG, and TMAX for a list of dates.
@@ -93,8 +102,9 @@ def calc_temps(start_date, end_date):
     
     return session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
         filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).all()
-
+    #return("Minimum temperature=", result[0])
 # function usage example
+#calc_temps('2012-02-28', '2012-03-05')
 print(calc_temps('2012-02-28', '2012-03-05'))
 ##------------------------------------------------------------------------------------------------------------
 # 4. Define main behavior
