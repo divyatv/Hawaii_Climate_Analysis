@@ -133,7 +133,9 @@ def temp_attr_querys(start_date, end_date):
        for all dates greater than and equal to the start date.
        When given the start and the end date, calculate the `TMIN`, `TAVG`, and `TMAX` 
        for dates between the start and end date inclusive.
-       Args: None
+       Args:
+        start_date (string): A date string in the format %Y-%m-%d
+        end_date (string): A date string in the format %Y-%m-%d
        Returns:
        Return a JSON list of the minimum temperature, the average temperature, 
        and the max temperature for a given start or start-end range.
