@@ -104,7 +104,7 @@ def tobs():
 @app.route('/api/v1.0/<start_date>')
 def temp_attr_query(start_date):
     """ Query for the dates and temperature observations from a year from the last data point.
-    Args: None
+    Args: start date
     Returns:
     Return a JSON list of Temperature Observations (tobs) for the previous year.
     """
@@ -145,10 +145,9 @@ def temp_attr_querys(start_date, end_date):
 
     result=calc_temps(start_date, end_date)
     summary={'Minumum Temperature':'', 'Maximum Temperature': '', 'Average Temperature': ''}
-    for row in result:
-        summary['Minumum Temperature']=row[0]
-        summary['Maximum Temperature']=row[2]
-        summary['Average Temperature']=row[1]
+    summary['Minumum Temperature']=result[0][0]
+    summary['Maximum Temperature']=result[0][2]
+    summary['Average Temperature']=result[0][1]
       
     return  (jsonify(summary))  
     
@@ -172,8 +171,8 @@ def calc_temps(start_date, end_date):
         import datetime
         import timestring
     ### Calcualte the last date available in the dataset.
-        end_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first()[0]
-        end_date=timestring.Date(end_date).date
+        #end_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first()[0]
+        #end_date=timestring.Date(end_date).date
       
         return session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
         filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).all()
